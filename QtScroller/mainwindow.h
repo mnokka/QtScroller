@@ -1,8 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QWidget>
-#include <QLabel>
+#include <QMainWindow>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsTextItem>
 #include <QTimer>
 
 class MainWindow : public QWidget
@@ -10,16 +12,18 @@ class MainWindow : public QWidget
     Q_OBJECT
 
 public:
-    MainWindow();  // Konstruktorin määrittely
+    MainWindow();
 
 private slots:
-    void moveText();  // Skrollauslogiikan metodi
+    void moveText();
 
 private:
-    QLabel *label;     // QLabel, johon teksti sijoitetaan
-    QTimer *timer;     // QTimer, joka ohjaa skrollauksen
-    int xPos;          // Labelin nykyinen horisontaalinen sijainti
-    int direction;     // Liikennesuunta: 1 oikealle, -1 vasemmalle
+    QGraphicsScene *scene;         // Grafiikkasuuntaus
+    QGraphicsView *view;           // Näkymä grafiikkasuuntausta
+    QGraphicsTextItem *textItem;   // Tekstikohde grafiikkasuuntauksessa
+    QTimer *timer;
+    int xPos;
+    int direction=-1;     // Liikennesuunta: 1 oikealle, -1 vasemmalle
 };
 
 #endif // MAINWINDOW_H

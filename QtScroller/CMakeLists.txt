@@ -38,6 +38,7 @@ else()
     else()
         add_executable(QtScroller
             ${PROJECT_SOURCES}
+            README.MD
         )
     endif()
 endif()
