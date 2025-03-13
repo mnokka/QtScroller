@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QApplication>
 #include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 MainWindow::MainWindow()
 {
@@ -15,12 +17,21 @@ MainWindow::MainWindow()
     setFixedSize(800, 150);
 
     scene = new QGraphicsScene(this);
-    textItem = new QGraphicsTextItem("Tämä on skrollaava teksti, joka liikkuu vasemmalta oikealle iankaikkisesti.");
-    textItem->setFont(QFont("Arial", 40));
-    textItem->setPos(0, 80);
-    scene->addItem(textItem);
+    QString scrollingText = "----- By mika.nokka1@gmail.com 2025 ---    Forever scrolling text example!";
 
-    int textWidth = textItem->boundingRect().width();
+    textItem1 = new QGraphicsTextItem(scrollingText);
+    textItem2 = new QGraphicsTextItem(scrollingText);
+    QFont font("Arial", 40);
+    textItem1->setFont(font);
+    textItem2->setFont(font);
+
+    textItem1->setDefaultTextColor(Qt::darkYellow);
+    textItem2->setDefaultTextColor(Qt::darkYellow);
+
+    scene->addItem(textItem1);
+    scene->addItem(textItem2);
+
+    int textWidth = textItem1->boundingRect().width();
     scene->setSceneRect(0, 0, textWidth , 200);
 
 
@@ -34,36 +45,45 @@ MainWindow::MainWindow()
     connect(timer, &QTimer::timeout, this, &MainWindow::moveText);
     timer->start(3);
 
-    xPos = 0;
+    xPos1 = 0;
+    xPos2 = textWidth; // Toinen teksti alkaa ensimmäisen perästä
 }
 
 void MainWindow::moveText()
 {
-    // scroll from right to left, forever
-
-    xPos += direction;
-    int textWidth = textItem->boundingRect().width();
+    int textWidth = textItem1->boundingRect().width();
     int windowWidth = width();
-    int offset = (textWidth > windowWidth) ? (textWidth-windowWidth) : 0;
-    //qDebug() << "xPos" << xPos;
-    //if (xPos  > windowWidth + offset) { // to right
-    if (xPos  + windowWidth +offset < 0) {
 
-        xPos=width()+offset;
-        //xPos = -textWidth; // to right
-        //qDebug() << "----------- siirros vasempaan laitaan ---------------------------";
-        //qDebug() << "windowWidth" << windowWidth;
-        //qDebug() << "textWidth" << textWidth;
-        //qDebug() << "offset" << offset;
-        //qDebug() << "-----------------------------------------------------------------";
+    xPos1 -= 1;
+    xPos2 -= 1;
+
+    // Jos teksti menee kokonaan vasemmalle ohi, siirretään se oikealle
+    if (xPos1 + textWidth < 0) {
+        xPos1 = xPos2 + textWidth;
+    }
+    if (xPos2 + textWidth < 0) {
+        xPos2 = xPos1 + textWidth;
     }
 
-    textItem->setPos(xPos, height() / 2 - 20);
-}
+    textItem1->setPos(xPos1, height() / 2 - 20);
+    textItem2->setPos(xPos2, height() / 2 - 20);
+    }
+
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+
+    QFile file(QCoreApplication::applicationDirPath() + "/../../darktheme.css");
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream ts(&file);
+        a.setStyleSheet(ts.readAll());
+    } else {
+        qWarning("Tyylitiedoston lataaminen epäonnistui.");
+    }
+
 
     MainWindow w;
     w.show();

@@ -2,3 +2,5 @@
 
 Scrolls text forever from left to right in a small window
 
+![Picture](ScreenShot.png)
+

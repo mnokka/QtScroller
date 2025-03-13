@@ -38,6 +38,7 @@ else()
         add_executable(QtScroller
             ${PROJECT_SOURCES}
             README.MD
+            darktheme.css
         )
     endif()
 endif()

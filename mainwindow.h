@@ -20,9 +20,11 @@ private slots:
 private:
     QGraphicsScene *scene;         // Grafiikkasuuntaus
     QGraphicsView *view;           // Näkymä grafiikkasuuntausta
-    QGraphicsTextItem *textItem;   // Tekstikohde grafiikkasuuntauksessa
+    QGraphicsTextItem *textItem1;   // Tekstikohde grafiikkasuuntauksessa
+    QGraphicsTextItem *textItem2;
     QTimer *timer;
-    int xPos;
+    int xPos1;
+    int xPos2;
     int direction=-1;     // Liikennesuunta: 1 oikealle, -1 vasemmalle
 };
 
